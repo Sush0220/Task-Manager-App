@@ -1,0 +1,15 @@
+<div class="centered-content">
+    <div class="modal-box">
+        <h2>Create a New Task</h2>
+
+        <p class="input-container">
+            <input #taskTitle type="text" placeholder="Enter New Task" name="text" id="text" class="input-field"
+                autocomplete="name">
+            <button (click)="createTask(taskTitle.value)" class="button-primary">Create</button>
+
+            <button routerLink="/">Back</button>
+        </p>
+
+
+    </div>
+</div>

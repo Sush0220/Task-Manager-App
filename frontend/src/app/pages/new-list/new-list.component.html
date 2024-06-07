@@ -1,0 +1,15 @@
+<div class="centered-content">
+    <div class="modal-box">
+        <h2>Create a New List</h2>
+
+        <p class="input-container">
+            <input #title type="text" placeholder="Enter New List" name="text" id="text" class="input-field"
+                autocomplete="name">
+            <button (click)="createList(title.value)" class="button-primary">Create</button>
+
+            <button routerLink="/">Back</button>
+        </p>
+
+
+    </div>
+</div>

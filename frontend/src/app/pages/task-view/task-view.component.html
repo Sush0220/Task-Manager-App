@@ -1,0 +1,41 @@
+<div>
+    <h1 class="heading">
+        Task Manager
+    </h1>
+</div>
+
+<div class="centered-content">
+    <div class="task-manager-container">
+        <div class="sidebar has-background-white">
+            <h1 class="title has-text-primary">Lists</h1>
+            <div class="list-menu">
+                <a [routerLink]="['/lists', list._id]" *ngFor="let list of lists" class="list-menu-item"
+                    routerLinkActive="is-active">
+                    <p>{{list.title}}</p>
+                </a>
+            </div>
+
+            <button routerLink="/newList" class="button-primary">+ New List</button>
+        </div>
+
+
+
+        <div class="task-lists-container has-background-light" *ngIf="tasks">
+            <h1 class="title has-text-primary">Tasks</h1>
+
+            <div class="task" *ngFor="let task of tasks" (click)="onTaskClick(task)"
+                [ngClass]="{'completed':task.completed}">
+                <p>{{task.title}}</p>
+            </div>
+
+            <div class="empty-state-text" *ngIf="tasks.length === 0">There are no tasks. Click Add button to add.</div>
+
+            <button routerLink="./new-task" class="circle-add-button">
+                +
+            </button>
+        </div>
+        <div *ngIf="!tasks">
+            <h3 class="empty-state-text">please Select a list</h3>
+        </div>
+    </div>
+</div>
