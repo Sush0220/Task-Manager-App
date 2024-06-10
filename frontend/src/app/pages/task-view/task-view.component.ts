@@ -4,6 +4,7 @@ import { ActivatedRoute, Params, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { List } from '../../models/list.model';
 import { Task } from '../../models/task.model';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-task-view',
@@ -19,7 +20,7 @@ export class TaskViewComponent {
 
   selectedListId!: string;
 
-  constructor(private taskService: TaskService, private route: ActivatedRoute, private router: Router) { }
+  constructor(private taskService: TaskService, private route: ActivatedRoute, private router: Router, private toast: ToastrService) { }
 
   ngOnInit() {
     this.route.params.subscribe(
@@ -44,25 +45,21 @@ export class TaskViewComponent {
   onTaskClick(task: Task) {
     // we want to set the task to completed
     this.taskService.complete(task).subscribe(() => {
-      console.log("Completed successully!");
       task.completed = !task.completed;
     })
   }
 
-  // onDeleteListClick() {
-  //   this.taskService.deleteList(this.selectedListId).subscribe((res: any) => {
-  //     this.router.navigate(['/lists']);
-  //     console.log(res);
-  //   })
-  // }
+  onDeleteListClicked() {
+    this.taskService.deleteList(this.selectedListId).subscribe((res: any) => {
+      this.router.navigate(['/lists']);
+      this.toast.success("List deleted", "Success");
+    })
+  }
 
-  // onDeleteTaskClick(id: string) {
-  //   this.taskService.deleteTask(this.selectedListId, id).subscribe((res: any) => {
-  //     this.tasks = this.tasks.filter(val => val._id !== id);
-  //     console.log(res);
-  //   })
-  // }
-
-
-
+  onTaskDeleteClick(id: string) {
+    this.taskService.deleteTask(this.selectedListId, id).subscribe((res: any) => {
+      this.tasks = this.tasks.filter(val => val._id !== id);
+      this.toast.success("Task deleted", "Success");
+    })
+  }
 }

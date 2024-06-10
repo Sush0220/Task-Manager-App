@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { TaskService } from '../../services/task.service';
 import { Router, RouterModule } from '@angular/router';
 import { List } from '../../models/list.model';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-new-list',
@@ -12,15 +13,15 @@ import { List } from '../../models/list.model';
 })
 export class NewListComponent {
 
-  constructor(private taskService: TaskService, private router: Router) { }
+  constructor(private taskService: TaskService, private router: Router, private toast: ToastrService) { }
 
 
 
   createList(title: string) {
     this.taskService.createList(title).subscribe((list: any) => {
-      console.log(list);
       // Now we navigate to /lists/task._id
       this.router.navigate(['/lists', list._id]);
+      this.toast.success("List created successfully", "Success");
     });
   }
 }

@@ -44,12 +44,24 @@
     position: relative;
 }
 
-.has-background-white{
-    background: white;
+.task-list-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    padding: 42px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
 }
 
-.has-background-light{
-    background: #f8f8f8;
+.task-list-container .top-bar {
+    margin-bottom: 20px;
+    display: flex;
+}
+
+.task-list-container .top-bar .title {
+    flex-grow: 1;
+    margin: 0;
 }
 
 .title{

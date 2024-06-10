@@ -32,6 +32,26 @@ export class AuthService {
     );
   }
 
+  signup(email: string, password: string) {
+    return this.webRequestService.signup(email, password).pipe(
+      shareReplay(),
+      tap((res: HttpResponse<any>) => {
+        console.log(res);
+
+        const accessToken = res.headers.get('x-access-token');
+        const refreshToken = res.headers.get('x-refresh-token');
+        const userId = res.body._id;
+
+        if (accessToken && refreshToken) {
+          this.setSession(userId, accessToken, refreshToken);
+          console.log("Successfully Signed up and Logged in!");
+        } else {
+          console.error("Login failed: Missing tokens");
+        }
+      })
+    );
+  }
+
 
   private setSession(userId: string, accessToken: string, refreshToken: string) {
     localStorage.setItem('user-id', userId);
@@ -40,7 +60,6 @@ export class AuthService {
   }
   logout() {
     console.log("Logged out");
-
     this.removeSession();
     this.router.navigate(['/login']);
   }
@@ -53,17 +72,23 @@ export class AuthService {
   }
   setAccessToken(accessToken: string) {
     localStorage.setItem('x-access-token', accessToken);
-
   }
-
-  private removeSession() {
+  getRefreshToken() {
+    let refreshToken = localStorage.getItem('x-refresh-token') as string;
+    return refreshToken;
+  }
+  getUserId() {
+    let user_id = localStorage.getItem('user-id') as string;
+    return user_id;
+  }
+  public removeSession() {
     localStorage.removeItem('user-id');
     localStorage.removeItem('x-access-token');
     localStorage.removeItem('x-refresh-token');
   }
 
   getNewAccessToken() {
-    return this.http.get(`${this.webService.ROOT_URL}/users/me/access-token`, {
+    return this.http.get(`${this.webRequestService.rootUrl}/users/me/access-token`, {
       headers: {
         'x-refresh-token': this.getRefreshToken(),
         '_id': this.getUserId()
@@ -71,20 +96,15 @@ export class AuthService {
       observe: 'response'
     }).pipe(
       tap((res: HttpResponse<any>) => {
+        console.log(res);
 
         const accessToken = res.headers.get('x-access-token');
         if (accessToken) {
           return this.setAccessToken(accessToken);
-
         }
       })
     )
   }
-  getRefreshToken() {
-    return localStorage.getItem('x-refresh-token');
-  }
-  getUserId() {
-    return localStorage.getItem('user-id');
-  }
+
 
 }

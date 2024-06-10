@@ -162,7 +162,7 @@ app.post("/lists", authenticate, (req, res) => {
  */
 app.patch("/lists/:id", authenticate, (req, res) => {
   // We want to update the specified list (list document with id in the URL) with the new values specified in the JSON body of the request
-  List.findOneAndUpdate(
+  List.findByIdAndUpdate(
     { _id: req.params.id, _userId: req.user_id },
     {
       $set: req.body,
@@ -178,7 +178,7 @@ app.patch("/lists/:id", authenticate, (req, res) => {
  */
 app.delete("/lists/:id", authenticate, (req, res) => {
   // We want to delete the specified list (document with id in the URL)
-  List.findOneAndRemove({
+  List.findOneAndDelete({
     _id: req.params.id,
     _userId: req.user_id,
   }).then((removedListDoc) => {
@@ -300,7 +300,7 @@ app.delete("/lists/:listId/tasks/:taskId", authenticate, (req, res) => {
     })
     .then((canDeleteTasks) => {
       if (canDeleteTasks) {
-        Task.findOneAndRemove({
+        Task.findOneAndDelete({
           _id: req.params.taskId,
           _listId: req.params.listId,
         }).then((removedTaskDoc) => {

@@ -5,24 +5,24 @@ import { Router, RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-signup',
   standalone: true,
   imports: [RouterModule],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  templateUrl: './signup.component.html',
+  styleUrl: './signup.component.css'
 })
-export class LoginComponent {
+export class SignupComponent {
+
   constructor(private authService: AuthService, private router: Router, private toast: ToastrService) { }
 
-  onLoginButtonClicked(email: string, password: string) {
-    this.authService.login(email, password).subscribe((res: HttpResponse<any>) => {
+  onSignupButtonClicked(email: string, password: string) {
+    this.authService.signup(email, password).subscribe((res: HttpResponse<any>) => {
       if (res.status === 200) {
-        this.router.navigate(['/lists']);
-        this.toast.success("Login successful", "Success");
+        this.router.navigate(['/login']);
+        this.toast.success("Sign up successful", "Success");
       } else {
-        this.toast.error("Login failed", "Error");
+        this.toast.error("Sign up failed", "Error");
       }
-    });
+    })
   }
-
 }

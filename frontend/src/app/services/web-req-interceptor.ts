@@ -10,7 +10,7 @@ export class WebReqInterceptor implements HttpInterceptor {
 
   constructor(private authService: AuthService) { }
 
-  refreshingAccessToken: boolean = false;
+  refreshingAccessToken!: boolean;
 
   accessTokenRefreshed: Subject<any> = new Subject();
 
@@ -24,31 +24,26 @@ export class WebReqInterceptor implements HttpInterceptor {
       catchError((error: HttpErrorResponse) => {
         console.log(error);
 
-        if (error.status === 401) {
+        if (error.status === 401 && !this.refreshingAccessToken) {
           // 401 error so we are unauthorized
           // refresh the access token
-          return from(this.refreshAccessToken())
-            .pipe(
-              switchMap(() => {
-                console.log('hello');
 
-                request = this.addAuthHeader(request);
-                console.log(request);
-                return next.handle(request);
-              }),
-              catchError((err: any) => {
-                console.log(err);
-                this.authService.logout();
-                return empty();
-              })
-            )
+          return this.refreshAccessToken().pipe(
+            switchMap(() => {
+              request = this.addAuthHeader(request);
+              return next.handle(request);
+            }),
+            catchError((err) => {
+              console.log(err);
+              this.authService.logout();
+              return empty();
+            })
+          )
         }
-
         return throwError(error);
       })
     )
   }
-
   refreshAccessToken(): Observable<any> {
     if (this.refreshingAccessToken) {
       return new Observable(observer => {
