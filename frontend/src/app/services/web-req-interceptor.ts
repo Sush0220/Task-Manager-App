@@ -22,7 +22,7 @@ export class WebReqInterceptor implements HttpInterceptor {
     // call next() and handle the response
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
-        console.log(error);
+
 
         if (error.status === 401 && !this.refreshingAccessToken) {
           // 401 error so we are unauthorized
@@ -34,7 +34,6 @@ export class WebReqInterceptor implements HttpInterceptor {
               return next.handle(request);
             }),
             catchError((err) => {
-              console.log(err);
               this.authService.logout();
               return empty();
             })
@@ -58,7 +57,7 @@ export class WebReqInterceptor implements HttpInterceptor {
       // we want to call a method in the auth service to send a request to refresh the access token
       return this.authService.getNewAccessToken().pipe(
         tap(() => {
-          console.log("Access Token Refreshed!");
+
           this.refreshingAccessToken = false;
           this.accessTokenRefreshed.next(null);
         })
