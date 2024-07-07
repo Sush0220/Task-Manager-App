@@ -1,6 +1,9 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
+const dotenv = require("dotenv");
+const path = require("path");
+dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 // Load in the mongoose models
 const { User } = require("./db/models/user");
@@ -11,7 +14,7 @@ const jwt = require("jsonwebtoken");
 //mongodb connection
 const mongoose = require("mongoose");
 mongoose
-  .connect("mongodb://localhost:27017/task-manager")
+  .connect(process.env.MONGODB_URI)
   .then(() => {
     console.log("connected to mongodb");
   })

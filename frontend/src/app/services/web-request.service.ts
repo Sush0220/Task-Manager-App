@@ -9,7 +9,7 @@ export class WebRequestService {
   public rootUrl!: string;
 
   constructor(private http: HttpClient) {
-    this.rootUrl = 'http://localhost:3000';
+    this.rootUrl = 'https://task-manager-app-0xxy.onrender.com';
   }
 
   get<T>(url: string) {
