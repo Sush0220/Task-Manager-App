@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { List } from '../../models/list.model';
 import { Task } from '../../models/task.model';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-task-view',
@@ -20,7 +21,7 @@ export class TaskViewComponent {
 
   selectedListId!: string;
 
-  constructor(private taskService: TaskService, private route: ActivatedRoute, private router: Router, private toast: ToastrService) { }
+  constructor(private taskService: TaskService, private route: ActivatedRoute, private router: Router, private toast: ToastrService, private authService: AuthService) { }
 
   ngOnInit() {
     this.route.params.subscribe(
@@ -40,6 +41,10 @@ export class TaskViewComponent {
       this.lists = lists;
     });
 
+  }
+
+  onLogout() {
+    this.authService.logout();
   }
 
   onTaskClick(task: Task) {
