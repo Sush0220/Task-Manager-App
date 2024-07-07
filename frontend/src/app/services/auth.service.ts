@@ -16,15 +16,13 @@ export class AuthService {
     return this.webRequestService.login(email, password).pipe(
       shareReplay(),
       tap((res: HttpResponse<any>) => {
-        console.log(res);
-
         const accessToken = res.headers.get('x-access-token');
         const refreshToken = res.headers.get('x-refresh-token');
         const userId = res.body._id;
 
         if (accessToken && refreshToken) {
           this.setSession(userId, accessToken, refreshToken);
-          console.log("Logged in!");
+
         } else {
           console.error("Login failed: Missing tokens");
         }
@@ -36,15 +34,13 @@ export class AuthService {
     return this.webRequestService.signup(email, password).pipe(
       shareReplay(),
       tap((res: HttpResponse<any>) => {
-        console.log(res);
-
         const accessToken = res.headers.get('x-access-token');
         const refreshToken = res.headers.get('x-refresh-token');
         const userId = res.body._id;
 
         if (accessToken && refreshToken) {
           this.setSession(userId, accessToken, refreshToken);
-          console.log("Successfully Signed up and Logged in!");
+
         } else {
           console.error("Login failed: Missing tokens");
         }
@@ -59,7 +55,6 @@ export class AuthService {
     localStorage.setItem('x-refresh-token', refreshToken);
   }
   logout() {
-    console.log("Logged out");
     this.removeSession();
     this.router.navigate(['/login']);
   }
